@@ -410,6 +410,7 @@ def generate_boost_serialization(package, port_def, output_cpp):
     for rb in sd.trigger_methods.read_buffers:
         class_name = "InputBuffers" + str(components_counter)
         s.write("ORO_LIST_COMPONENT_TYPE(" + package + "_types::" + class_name + ")\n")
+        components_counter = components_counter + 1
 
     (output_dir,filename) = os.path.split(output_cpp)
     try:
