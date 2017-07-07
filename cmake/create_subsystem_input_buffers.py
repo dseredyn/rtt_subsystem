@@ -233,7 +233,7 @@ def generate_boost_serialization(package, port_def, output_cpp):
 
         s.write("    bool startHook() {\n")
 #        s.write("        Logger::log() << Logger::Info << getName() << \" startHook a\" << Logger::endl;\n")
-        s.write("        time_last_s_ = rtt_rosclock::host_now();     // save last write time\n")
+        s.write("        time_last_s_ = rtt_rosclock::rtt_wall_now();     // save last write time\n")
         s.write("        int result = 0;\n")
         s.write("        void *pbuf = NULL;\n")
         for buf_name in all_buffers:
@@ -278,7 +278,7 @@ def generate_boost_serialization(package, port_def, output_cpp):
             if not buf_in:
                 raise Exception('buffer not found', 'buffer specified in trigger methods <read_data>: \'' + buf_name + '\' could not be found in defined buffers')
 
-            s.write("        timeout_s = timeout_base_s - (rtt_rosclock::host_now() - time_last_s_).toSec();\n")
+            s.write("        timeout_s = timeout_base_s - (rtt_rosclock::rtt_wall_now() - time_last_s_).toSec();\n")
 
             s.write("        read_status = -1;\n")
             s.write("        if (timeout_s > 0) {\n")
@@ -358,7 +358,7 @@ def generate_boost_serialization(package, port_def, output_cpp):
 #        s.write("        Logger::log() << Logger::Info << getName() << \" writing with status: \" << (all_obligatory_reads_successful?\"true\":\"false\") << Logger::endl;\n")
         s.write("        last_read_successful_ = all_obligatory_reads_successful;\n")
         s.write("        port_msg_out_.write(buf);\n")
-        s.write("        timeout_s = " + str(rb.min_period) + " - (rtt_rosclock::host_now() - time_last_s_).toSec();  // calculate sleep time\n")
+        s.write("        timeout_s = " + str(rb.min_period) + " - (rtt_rosclock::rtt_wall_now() - time_last_s_).toSec();  // calculate sleep time\n")
         s.write("        if (timeout_s > 0) {\n")
         #s.write("            usleep( static_cast<int >((timeout_s)*1000000.0) );\n")
         s.write("            timespec ts2;\n")
@@ -367,13 +367,13 @@ def generate_boost_serialization(package, port_def, output_cpp):
         s.write("            nanosleep( &ts2, NULL );\n")
         s.write("        }\n")
 #        s.write("        if (use_sim_time_) {\n")
-#        s.write("            timeout_s = " + str(rb.min_period) + " - (rtt_rosclock::host_now() - time_last_s_).toSec();  // calculate sleep time\n")
+#        s.write("            timeout_s = " + str(rb.min_period) + " - (rtt_rosclock::rtt_wall_now() - time_last_s_).toSec();  // calculate sleep time\n")
 #        s.write("            while (timeout_s > 0.0001) {\n")
 #        s.write("                usleep( static_cast<int >((timeout_s)*1000000.0) );\n")
-#        s.write("                timeout_s = " + str(rb.min_period) + " - (rtt_rosclock::host_now() - time_last_s_).toSec();  // calculate sleep time\n")
+#        s.write("                timeout_s = " + str(rb.min_period) + " - (rtt_rosclock::rtt_wall_now() - time_last_s_).toSec();  // calculate sleep time\n")
 #        s.write("            }\n")
 #        s.write("        }\n")
-        s.write("        time_last_s_ = rtt_rosclock::host_now();     // save last write time\n")
+        s.write("        time_last_s_ = rtt_rosclock::rtt_wall_now();     // save last write time\n")
 
         s.write("        trigger();\n")
 
